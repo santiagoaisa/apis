@@ -4,15 +4,6 @@ Fire Base
 
 */
 
-var config = {
-    apiKey: "AIzaSyAf9CuoMnQJ0dz8C2tOI-1rWBdR33qc7_g",
-    authDomain: "repartidores-c4d8a.firebaseapp.com",
-    databaseURL: "https://repartidores-c4d8a.firebaseio.com",
-    projectId: "repartidores-c4d8a",
-    storageBucket: "repartidores-c4d8a.appspot.com",
-    messagingSenderId: "730984820662"
-  };
-
 firebase.initializeApp(config);
 
 
@@ -23,6 +14,8 @@ var miPosicion={
 
 var map;
 var marker;
+var divRepartidores;
+var repartidoresFirebase=[];
 
 function crearMarcador(){
 
@@ -51,13 +44,7 @@ function traerRepartidor(){
 
     cn.once('value',(data)=>{
         
-        data.forEach((fila)=>{
-
-            console.log("ID",fila.key);
-            console.log("Nombre",fila.val().nombre);
-            
-
-        });
+        llenarCanchas(data);
 
 
     });
@@ -68,6 +55,11 @@ function initMap() {
   var btncrear=document.getElementById('btncrear');
   var btnborrar=document.getElementById('btnborrar');
   var btnrepartidor=document.getElementById('btnrepartidor');
+  divRepartidores=document.getElementById('divRepartidores');
+    var cargando=document.createElement("img");
+    cargando.setAttribute("src","img/cargando.gif");
+    divRepartidores.append(cargando);
+
 
   map = new google.maps.Map(div, {
     
@@ -116,5 +108,54 @@ let getLocation=()=>{
 getLocation();
 window.addEventListener('load',initMap);
 
+let llenarCanchas=(data)=>{
 
+    if(data){
+
+        divRepartidores.innerHTML=""
+
+        data.forEach((fila)=>{
+
+            console.log("ID",fila.key);
+            console.log("Nombre",fila.val().nombre);
+
+            repartidoresFirebase.push(new Repartidor(fila.key,fila.val().nombre,fila.val().ruta,fila.val().telefono,fila.val().latitud,fila.val().longitud ));
+            
+
+           
+    
+        });
+
+        let tabla=document.createElement("table");
+        tabla.setAttribute("class","table table-striped");
+
+        repartidoresFirebase.forEach((repartidor)=>{
+
+            let tr=document.createElement("tr");
+            
+            let tdId=document.createElement("td");
+            tdId.innerHTML=repartidor.id;
+
+
+            let tdNombre=document.createElement("td");
+            tdNombre.innerHTML=repartidor.nombre;
+
+            tr.append(tdId);
+            tr.append(tdNombre);
+
+            tabla.append(tr);
+
+
+
+        });
+
+        divRepartidores.append(tabla);
+        console.log(repartidoresFirebase);
+
+
+    }else{
+        divRepartidores.innerHTML="<h2> No hay Repartidores </h2>"
+    }
+    
+}
 
