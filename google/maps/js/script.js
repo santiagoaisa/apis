@@ -16,6 +16,38 @@ var map;
 var marker;
 var divRepartidores;
 var repartidoresFirebase=[];
+var marcadoresFirebase=[];
+var referencia ;
+referencia = firebase.database().ref("repartidores");
+
+function crearRepartidor(){
+    let txtNombre=document.getElementById('txtNombre');
+    let txtRuta=document.getElementById('txtRuta');
+    let txtTelefono=document.getElementById('txtTelefono');
+
+    
+    const nuevaKey=referencia.push().key;
+    console.log(nuevaKey);
+
+    //set, toma la data de un jason
+
+    referencia.child(nuevaKey).set(
+        {
+
+            latitud:-16.430231,
+            longitud:-71.52142,
+            nombre:txtNombre.value,
+            ruta:txtRuta.value,
+            telefono:txtTelefono.value
+
+
+        }
+
+    );
+
+    //let repartidor=new Repartidor(nuevaKey,)
+
+}
 
 function crearMarcador(){
 
@@ -39,12 +71,12 @@ function borrarMarcador(){
 
 function traerRepartidor(){
     //1- crear referencia al nodo en firebase
-    var cn = firebase.database().ref("repartidores");
+   
     //2- usar funcion de obtencion de registro [ on, once ]
 
-    cn.once('value',(data)=>{
+    referencia.once('value',(data)=>{
         
-        llenarCanchas(data);
+        llenarRepartidor(data);
 
 
     });
@@ -55,6 +87,9 @@ function initMap() {
   var btncrear=document.getElementById('btncrear');
   var btnborrar=document.getElementById('btnborrar');
   var btnrepartidor=document.getElementById('btnrepartidor');
+  var btncrearrepartidor=document.getElementById('btncrearrepartidor');
+
+
   divRepartidores=document.getElementById('divRepartidores');
     var cargando=document.createElement("img");
     cargando.setAttribute("src","img/cargando.gif");
@@ -70,6 +105,7 @@ function initMap() {
     btncrear.addEventListener('click',crearMarcador);
     btnborrar.addEventListener('click',borrarMarcador);
     btnrepartidor.addEventListener('click',traerRepartidor);
+    btncrearrepartidor.addEventListener('click',crearRepartidor);
 
    
 }
@@ -108,7 +144,7 @@ let getLocation=()=>{
 getLocation();
 window.addEventListener('load',initMap);
 
-let llenarCanchas=(data)=>{
+let llenarRepartidor=(data)=>{
 
     if(data){
 
@@ -145,7 +181,19 @@ let llenarCanchas=(data)=>{
 
             tabla.append(tr);
 
+            // llenar marcadores
+            let marcador1=new google.maps.Marker({
 
+                    position:{lat : repartidor.latitud , lng : repartidor.longitud},
+                    map:map,
+                    icon:"img/present.png",
+                    draggable:true
+                    
+
+            });
+
+
+            marcadoresFirebase.push(marcador1);
 
         });
 

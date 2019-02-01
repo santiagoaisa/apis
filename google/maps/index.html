@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
         crossorigin="anonymous">
 
-        <!-- Firebase App is always required and must be first -->
-        <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
+    <!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-app.js"></script>
 
 
     <!-- Add additional services that you want to use -->
@@ -21,12 +21,71 @@
     <script src="js/repartidor.js"></script>
     <script src="js/firebase.js"></script>
     <script src="js/script.js"></script>
-    
+
 
 
 </head>
 
 <body>
+
+    <!--Modales -->
+
+    <div class="modal fade" id="crearModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Crear Repartidor</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <div id="mapaCoordenada">
+
+
+
+                    </div>
+
+                    <hr>
+
+                    <form>
+                        <div class="form-group">
+                            <label for="txtNombre">Nombre</label>
+                            <input type="text" class="form-control" id="txtNombre" aria-describedby="Nombre Repartidor"
+                                placeholder="Ingrese el Nombre">
+                            
+                        </div>
+
+                        <div class="form-group">
+                            <label for="txtRuta">Ruta</label>
+                            <input type="text" class="form-control" id="txtRuta" aria-describedby="Ingrese la Ruta"
+                                placeholder="Ingrese la ruta del repartidor">
+                            
+                        </div>
+
+                        <div class="form-group">
+                                <label for="txtTelefono">Teléfono</label>
+                                <input type="text" class="form-control" id="txtTelefono" aria-describedby="Ingrese el teléfono"
+                                    placeholder="Ingrese el teléfono del Repartidor">
+                                
+                            </div>
+
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button id="btncrearrepartidor" type="button" class="btn btn-primary">Grabar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modales -->
 
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -79,6 +138,10 @@
 
                 <button id="btnrepartidor" type="button" class="btn btn-warning btn-lg btn-block">Traer Repartidores</button>
 
+                <button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal"
+                    data-target="#crearModal">Crear
+                    Repartidores</button>
+
 
             </div>
 
@@ -95,7 +158,7 @@
 
         <div class="row" id="divRepartidores">
             <div class="col-md-12 bg-light p-5">
-                
+
 
             </div>
         </div>

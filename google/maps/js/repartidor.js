@@ -46,7 +46,7 @@ class Repartidor{
     }
 
     get latitud(){
-        return this._longitud;
+        return this._latitud;
     }
 
     set latitud(latitud){
