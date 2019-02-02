@@ -6,5 +6,34 @@
       
 
       #mapaCoordenada{
-        height: 150px;
+        height: 300px;
+      }
+
+   
+
+      .modal{
+        z-index: 20;
+      }
+      .modal-backdrop{
+        z-index: 140;
+      }
+
+      #txtBusqueda {
+        background-color: #fff;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        margin-left: 12px;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 400px;
+      }
+
+      
+      .pac-container{
+        background-color: #fff;
+        z-index: 20;
+        position: fixed;
+        display: inline-block;
+        float: left;
       }

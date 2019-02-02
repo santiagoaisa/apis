@@ -17,6 +17,7 @@
 
     <!-- Add additional services that you want to use -->
     <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.2/firebase-storage.js"></script>
 
     <script src="js/repartidor.js"></script>
     <script src="js/firebase.js"></script>
@@ -42,6 +43,18 @@
                 <div class="modal-body">
 
 
+
+                   
+
+                        <input type="text" class="form-control" id="txtBusqueda" aria-describedby="Nombre de una calle"
+                            placeholder="Ingrese una dirección">
+
+                   
+
+
+
+
+
                     <div id="mapaCoordenada">
 
 
@@ -51,26 +64,59 @@
                     <hr>
 
                     <form>
-                        <div class="form-group">
-                            <label for="txtNombre">Nombre</label>
-                            <input type="text" class="form-control" id="txtNombre" aria-describedby="Nombre Repartidor"
-                                placeholder="Ingrese el Nombre">
-                            
+                        <div class="form-row">
+
+                            <div class="col">
+
+                                <label for="txtNombre">Nombre</label>
+                                <input type="text" class="form-control" id="txtNombre" aria-describedby="Nombre Repartidor"
+                                    placeholder="Ingrese el Nombre">
+
+                            </div>
+
+
+
                         </div>
 
-                        <div class="form-group">
-                            <label for="txtRuta">Ruta</label>
-                            <input type="text" class="form-control" id="txtRuta" aria-describedby="Ingrese la Ruta"
-                                placeholder="Ingrese la ruta del repartidor">
-                            
-                        </div>
+                        <div class="form-row">
 
-                        <div class="form-group">
+
+                            <div class="col">
+
+                                <label for="txtRuta">Ruta</label>
+                                <input type="text" class="form-control" id="txtRuta" aria-describedby="Ingrese la Ruta"
+                                    placeholder="Ingrese la Ruta del repartidor">
+
+                            </div>
+
+
+                            <div class="col">
+
                                 <label for="txtTelefono">Teléfono</label>
                                 <input type="text" class="form-control" id="txtTelefono" aria-describedby="Ingrese el teléfono"
                                     placeholder="Ingrese el teléfono del Repartidor">
-                                
+
                             </div>
+                        </div>
+
+                        <div class="form-row">
+
+
+                            <div class="col">
+
+                                <label for="txtLatitud">Latitud</label>
+                                <input type="number" class="form-control" id="txtLatitud" readonly>
+
+                            </div>
+
+
+                            <div class="col">
+
+                                <label for="txtLongitud">Longitud</label>
+                                <input type="number" class="form-control" id="txtLongitud" readonly>
+
+                            </div>
+                        </div>
 
 
                     </form>
@@ -138,9 +184,14 @@
 
                 <button id="btnrepartidor" type="button" class="btn btn-warning btn-lg btn-block">Traer Repartidores</button>
 
-                <button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal"
-                    data-target="#crearModal">Crear
+                <button type="button" class="btn btn-success btn-lg btn-block" data-toggle="modal" data-target="#crearModal">Crear
                     Repartidores</button>
+
+                    <hr>
+
+                    <input type="file" class="form-control" id="btnphoto">
+
+                    <button id="btnSubirArchivo" type="button" class="btn btn-warning btn-lg btn-block" data-toggle="modal">Subir Archivo</button>
 
 
             </div>
@@ -169,7 +220,7 @@
 
 
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCa8cFECuC9BFE92DkkSaWIpjW3lojCXTE" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCa8cFECuC9BFE92DkkSaWIpjW3lojCXTE&libraries=places" async defer></script>
 
     <!--
             defer -- que se cargue despues de cargar todo el dom
