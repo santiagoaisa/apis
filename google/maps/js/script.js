@@ -27,27 +27,46 @@ var referenciaStorage = firebase.storage().ref();
 
 var cargando = document.createElement("img");
 
+
 function crearRepartidor() {
 
     let txtNombre = document.getElementById('txtNombre');
-    let txtRuta = document.getElementById('txtRuta');
+    let txtRutaFile = document.getElementById('txtRutaFile');
     let txtTelefono = document.getElementById('txtTelefono');
     let txtLatitud = document.getElementById('txtLatitud');
     let txtLongitud = document.getElementById('txtLongitud');
+    
 
 
     const nuevaKey = referencia.push().key;
     console.log(nuevaKey);
 
-    //set, toma la data de un jason
+    var archivo=txtRutaFile.files[0];
 
-    referencia.child(nuevaKey).set(
+    // el simbolo + sirve para transformar el contenido que haga referencia
+    var nombre = nuevaKey;
+
+    var metadata={
+        contenType:archivo.type
+    }
+
+   
+
+    referenciaStorage.child(nombre).put(archivo,metadata).then((snapshot)=>{
+                return snapshot.ref.getDownloadURL();
+    }).then( (url) => {
+
+        
+       
+
+        //set, toma la data de un json
+        referencia.child(nuevaKey).set(
         {
 
             latitud: markerCoordenada.getPosition().lat(),
             longitud: markerCoordenada.getPosition().lng(),
             nombre: txtNombre.value,
-            ruta: txtRuta.value,
+            ruta: url,
             telefono: txtTelefono.value
 
 
@@ -61,9 +80,18 @@ function crearRepartidor() {
 
     );
 
+    }).catch( (error) => {
+        console.log("error",error);
+        
+    }) ;
+
+
+    
+
     //let repartidor=new Repartidor(nuevaKey,)
 
 }
+
 
 function crearMarcador() {
 
@@ -107,6 +135,34 @@ function traerRepartidor() {
     });
 }
 
+
+function subirFileRepartidor(){
+    var btnSubirRuta = document.getElementById('btnSubirRuta');
+
+    var archivo=btnSubirRuta.files[0];
+
+    //parseInt
+    // el simbolo + sirve para transformar el contenido que haga referencia
+    var nombre = +(new Date())+"-"+archivo.name;
+
+    var metadata={
+        contenType:archivo.type
+    }
+
+    referenciaStorage.child(nombre).put(archivo,metadata).then((snapshot)=>{
+                return snapshot.ref.getDownloadURL();
+    }).then( (url) => {
+
+        console.log(url);
+
+    }).catch( (error) => {
+        console.log("error",error);
+        
+    }) ;
+
+
+}
+
 function subirArchivo(){
     var btnphoto = document.getElementById('btnphoto');
 
@@ -146,6 +202,7 @@ function initMap() {
     var btnrepartidor = document.getElementById('btnrepartidor');
     var btncrearrepartidor = document.getElementById('btncrearrepartidor');
     var btnsubirarchivo = document.getElementById('btnSubirArchivo');
+   
 
 
     divRepartidores = document.getElementById('divRepartidores');
@@ -215,6 +272,7 @@ function initMap() {
     btnrepartidor.addEventListener('click', traerRepartidor);
     btncrearrepartidor.addEventListener('click', crearRepartidor);
     btnsubirarchivo.addEventListener('click', subirArchivo);
+   
 
 
 }
@@ -258,8 +316,11 @@ window.addEventListener('load', initMap);
 let llenarRepartidor = (data) => {
 
     if (data) {
+        
+        
+        divRepartidores.innerHTML = "";
 
-        divRepartidores.innerHTML = ""
+        repartidoresFirebase=[];
 
         data.forEach((fila) => {
 
@@ -273,25 +334,46 @@ let llenarRepartidor = (data) => {
 
         });
 
+        
+
         let tabla = document.createElement("table");
-        tabla.setAttribute("class", "table table-striped");
+       
+
+
+        tabla.setAttribute("class", "table");
+
+        let thead = document.createElement("thead");
+        thead.setAttribute("class", "thead-dark");
+
 
         let trCabecera = document.createElement("tr");
        
-        let tdIdCabecera = document.createElement("td");
+        let tdIdCabecera = document.createElement("th");
         tdIdCabecera.innerHTML = "ID";
 
-        let tdNombreCabecera = document.createElement("td");
+        let tdNombreCabecera = document.createElement("th");
         tdNombreCabecera.innerHTML = "NOMBRE";
+
+        let tdImagenCabecera = document.createElement("th");
+        tdImagenCabecera.innerHTML = "IMAGEN";
+
+        let tdAccion = document.createElement("th");
+        tdAccion.innerHTML = "ELIMINAR";
+
 
         trCabecera.append(tdIdCabecera);
         trCabecera.append(tdNombreCabecera);
+        trCabecera.append(tdImagenCabecera);
+        trCabecera.append(tdAccion);
 
-        tabla.append(trCabecera);
+        thead.append(trCabecera);
+
+        tabla.append(thead);
 
         repartidoresFirebase.forEach((repartidor) => {
 
             let tr = document.createElement("tr");
+            tr.setAttribute("id",repartidor.id);
 
             let tdId = document.createElement("td");
             tdId.innerHTML = repartidor.id;
@@ -300,8 +382,21 @@ let llenarRepartidor = (data) => {
             let tdNombre = document.createElement("td");
             tdNombre.innerHTML = repartidor.nombre;
 
+            let tdImagen = document.createElement("td");
+            let ImgImagen = document.createElement("img");
+            ImgImagen.setAttribute("src",repartidor.ruta);
+            ImgImagen.setAttribute("width","100");
+            ImgImagen.setAttribute("height","100");
+            tdImagen.append(ImgImagen);
+
+            let tdBorrar = document.createElement("td");
+            tdBorrar.innerHTML = `<button id="btnborrar" type="button" onclick="eliminarRepartidor('${repartidor.id}')" class="btn btn-danger btn-lg btn-block">Eliminar</button>`
+
+
             tr.append(tdId);
             tr.append(tdNombre);
+            tr.append(tdImagen);
+            tr.append(tdBorrar);
 
             tabla.append(tr);
 
@@ -331,3 +426,11 @@ let llenarRepartidor = (data) => {
 
 }
 
+function eliminarRepartidor(id){
+
+    
+    
+    firebase.database().ref(`repartidores/${id}`).remove();
+
+    
+}
